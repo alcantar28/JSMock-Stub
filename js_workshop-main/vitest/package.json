@@ -1,0 +1,19 @@
+{
+  "name": "@vitest/example-test",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test:vitest": "vitest --config ./src/vitest.config.ts"
+  },
+  "devDependencies": {
+    "@vitest/ui": "latest",
+    "vite": "latest",
+    "vitest": "latest"
+  },
+  "dependencies": {
+    "axios": "^1.9.0",
+    "ts-node": "^10.9.2"
+  }
+}

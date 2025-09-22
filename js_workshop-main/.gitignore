@@ -1,0 +1,7 @@
+jest/node_modules
+jest/src/results
+jest/src/config
+
+vitest/node_modules
+vitest/html
+vitest/src/config
