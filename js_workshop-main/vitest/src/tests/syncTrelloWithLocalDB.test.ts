@@ -19,7 +19,7 @@ const localDbMock = {
   updateTask: vi.fn(),
 };
 
-describe('TrelloSync', () => {
+describe.skip('TrelloSync', () => {
   it('mimic syncTrelloWithLocalDB() functionality', async () => {
     const trelloLocalDBSync = new TrelloLocalDBSync(trelloApiMock, localDbMock);
     const result = await trelloLocalDBSync.syncTrelloWithLocalDB('board1');

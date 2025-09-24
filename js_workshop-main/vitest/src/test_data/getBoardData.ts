@@ -18,9 +18,9 @@ export const getMultipleLists : any =
         "idBoard": "<string>",
         "subscribed": true,
         "limits": {
-        "attachments": {
-            "perBoard": {}
-        }
+            "attachments": {
+                "perBoard": {}
+            }
         }
     },
     {
@@ -32,9 +32,9 @@ export const getMultipleLists : any =
         "idBoard": "<string>",
         "subscribed": true,
         "limits": {
-        "attachments": {
-            "perBoard": {}
-        }
+            "attachments": {
+                "perBoard": {}
+            }
         }
     }
 ]
