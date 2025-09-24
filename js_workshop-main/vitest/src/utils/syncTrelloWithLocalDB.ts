@@ -55,7 +55,6 @@ export class TrelloLocalDBSync {
       console.error('Error during synchronization:', error);
       throw error;
     }
-
     return result;
   }
 
@@ -64,19 +63,19 @@ export class TrelloLocalDBSync {
    * @param {string} boardId - The ID of the Trello board.
    * @returns {Promise<Array>} - A list of Trello lists with their cards.
    */
-async fetchTrelloTaskLists(boardId: any) {
-  // Mockable method to fetch lists from Trello
-  const lists = await this.trelloApi.getLists(boardId);
-  const taskLists = lists.filter((list: any) => list.name.toLowerCase().includes('task'));
+  async fetchTrelloTaskLists(boardId: any) {
+    // Mockable method to fetch lists from Trello
+    const lists = await this.trelloApi.getLists(boardId);
+    const taskLists = lists.filter((list: any) => list.name.toLowerCase().includes('task'));
 
-  // Resolve all cards for each list
-  return Promise.all(
-    taskLists.map(async (list: any) => ({
-      ...list,
-      cards: await this.trelloApi.getCards(list.id),
-    }))
-  );
-}
+    // Resolve all cards for each list
+    return Promise.all(
+      taskLists.map(async (list: any) => ({
+        ...list,
+        cards: await this.trelloApi.getCards(list.id),
+      }))
+    );
+  }
 
   /**
    * Fetches all tasks from the local database.

@@ -1,45 +1,30 @@
 import { describe, expect, it, vi } from 'vitest';
 import { TrelloLocalDBSync } from '../utils/syncTrelloWithLocalDB.ts';
+import { TestObjects } from '../utils/helpers/testObjects.ts';
+
+const testObjects = new TestObjects;
+const boardId = 'board1';
 
 const trelloApiMock = {
-  getLists: vi.fn().mockResolvedValue([
-    { id: 'mockList', name: 'Mock Task List' },
-  ]),
-  getCards: vi.fn().mockResolvedValue([
-    { id: 'mockCard1', name: 'Mock Task 1', desc: 'Updated Description 1', due: '2028-10-01' },
-    { id: 'mockCard2', name: 'Mock Task 2', desc: 'Description 2', due: '2028-10-02' },
-  ]),
+  getLists: vi.fn().mockResolvedValue(testObjects.trelloList),
+  getCards: vi.fn().mockResolvedValue(testObjects.trelloCards),
 };
 
 const localDbMock = {
-  getTasks: vi.fn().mockResolvedValue([
-    { id: 'mockCard1', name: 'Mock Task 1', description: 'Description 1', dueDate: '2028-10-01' },
-  ]),
+  getTasks: vi.fn().mockResolvedValue(testObjects.trelloTask),
   addTask: vi.fn(),
   updateTask: vi.fn(),
 };
 
-describe.skip('TrelloSync', () => {
-  it('mimic syncTrelloWithLocalDB() functionality', async () => {
+describe('TrelloSync', () => {
+  it('should mimic syncTrelloWithLocalDB() functionality', async () => {
     const trelloLocalDBSync = new TrelloLocalDBSync(trelloApiMock, localDbMock);
-    const result = await trelloLocalDBSync.syncTrelloWithLocalDB('board1');
+    const result = await trelloLocalDBSync.syncTrelloWithLocalDB(boardId);
 
     expect(result.added).toHaveLength(1);
     expect(result.updated).toHaveLength(1);
     expect(result.skipped).toHaveLength(0);
-
-    expect(localDbMock.addTask).toHaveBeenCalledWith({
-      id: 'mockCard2',
-      name: 'Mock Task 2',
-      desc: 'Description 2',
-      due: '2028-10-02',
-    });
-
-    expect(localDbMock.updateTask).toHaveBeenCalledWith({
-      id: 'mockCard1',
-      name: 'Mock Task 1',
-      desc: 'Updated Description 1',
-      due: '2028-10-01',
-    });
+    expect(localDbMock.addTask).toHaveBeenCalledWith(testObjects.trelloCards[1]);
+    expect(localDbMock.updateTask).toHaveBeenCalledWith(testObjects.trelloCards[0]);
   });
 });

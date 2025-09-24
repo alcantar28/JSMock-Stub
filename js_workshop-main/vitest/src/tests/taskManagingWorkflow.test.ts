@@ -1,31 +1,29 @@
 import { beforeAll, describe, expect, it, MockInstance, vi } from 'vitest';
 import { MockFunctions } from '../utils/helpers/common.ts';
+import { TestObjects } from '../utils/helpers/testObjects.ts';
 import { TaskWorkflowFunc } from '../utils/taskManagingWorkflow.ts';
 import axios from 'axios';
 
 const taskWorkflowFunc = new TaskWorkflowFunc();
+const testObjects = new TestObjects();
 let spy: MockInstance;
 
-describe.skip('Mocking complex functions', async () => {
+describe('Mocking complex functions', async () => {
 
     beforeAll(async () => {
-
         spy = vi.spyOn(taskWorkflowFunc, 'fetchIncompleteTasksFromDB')
             .mockImplementation(async () => {
                 // Simulate a database query
-            return [
-                { id: 1, title: 'Task 1', description: 'Description for Task 1' },
-                { id: 2, title: 'Task 2', description: 'Description for Task 2' }
-            ];
+            return testObjects.incompleteTasks;
         })
         spy = vi.spyOn(taskWorkflowFunc, 'createTrelloCard')
             .mockImplementation(async () => {
-                return {id: 'card1', url: 'https://trello.com/c/card1'};
-            })
+                return testObjects.trelloCard;
+        })
         spy = vi.spyOn(taskWorkflowFunc, 'updateTaskWithTrelloCardID')
             .mockImplementation(async () => {
                 return true;
-            })
+        })
     })
 
     it('Try to mimic manageProjectTasks() functionality', async () => {
@@ -34,10 +32,7 @@ describe.skip('Mocking complex functions', async () => {
         expect(taskWorkflowFunc.fetchIncompleteTasksFromDB).toHaveBeenCalled();
         expect(taskWorkflowFunc.createTrelloCard).toHaveBeenCalled();
         expect(taskWorkflowFunc.updateTaskWithTrelloCardID).toHaveBeenCalled();
-        expect(result).to.deep.equals({
-            tasksProcessed: 2,
-            trelloLinks: ['https://trello.com/c/card1', 'https://trello.com/c/card1'],
-        })
+        expect(result).to.deep.equals(testObjects.processedCards)
     });
 
     it('Try to check on API being called within reportToDB', async () => {

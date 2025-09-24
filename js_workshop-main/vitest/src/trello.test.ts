@@ -6,7 +6,6 @@ const apiHelper = new APIHelper();
 
 let idBoardTrello: string;
 let idNewList: string;
-let idNewCard: string;
 
 describe.skip('Testing Trello', () => {
   beforeAll(async () => {
@@ -39,9 +38,10 @@ describe.skip('Testing Trello', () => {
         name: "NewCard"
       }
     )
-    idNewCard = response.data.id;
+    let idNewCard = response.data.id;
     expect(response.status, `RESPONSE: ${JSON.stringify(response.data)}`).toBe(200);
     expect(idNewList).to.not.be.undefined;
+    expect(idNewCard).to.not.be.undefined;
   })
 
   it("Archive the new list", async ()=> {
