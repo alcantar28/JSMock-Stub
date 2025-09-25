@@ -1,17 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
 import { TrelloLocalDBSync } from '../utils/syncTrelloWithLocalDB.ts';
-import { TestObjects } from '../utils/helpers/testObjects.ts';
+import { trelloList, trelloCards, trelloTask } from '../test_data/trelloData.ts';
 
-const testObjects = new TestObjects;
 const boardId = 'board1';
 
 const trelloApiMock = {
-  getLists: vi.fn().mockResolvedValue(testObjects.trelloList),
-  getCards: vi.fn().mockResolvedValue(testObjects.trelloCards),
+  getLists: vi.fn().mockResolvedValue(trelloList),
+  getCards: vi.fn().mockResolvedValue(trelloCards),
 };
 
 const localDbMock = {
-  getTasks: vi.fn().mockResolvedValue(testObjects.trelloTask),
+  getTasks: vi.fn().mockResolvedValue(trelloTask),
   addTask: vi.fn(),
   updateTask: vi.fn(),
 };
@@ -24,7 +23,7 @@ describe('TrelloSync', () => {
     expect(result.added).toHaveLength(1);
     expect(result.updated).toHaveLength(1);
     expect(result.skipped).toHaveLength(0);
-    expect(localDbMock.addTask).toHaveBeenCalledWith(testObjects.trelloCards[1]);
-    expect(localDbMock.updateTask).toHaveBeenCalledWith(testObjects.trelloCards[0]);
+    expect(localDbMock.addTask).toHaveBeenCalledWith(trelloCards[1]);
+    expect(localDbMock.updateTask).toHaveBeenCalledWith(trelloCards[0]);
   });
 });

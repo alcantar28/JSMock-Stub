@@ -1,17 +1,15 @@
 import { describe, it, expect, vi, afterAll, MockInstance } from 'vitest';
 import { WeeklyReportGenerator } from '../utils/weeklyReportGenerator.ts';
 import { MockFunctions } from '../utils/helpers/common.ts';
-import { TestObjects } from '../utils/helpers/testObjects.ts';
+import { getBoardData, trelloTask, trelloApiResponse, trelloCompileReportData } from '../test_data/trelloData.ts';
 import { trelloConfig } from '../config/config.ts';
-import { getBoardData } from '../test_data/getBoardData.ts';
 import APIHelper from '../utils/api/common.ts';
 
-vi.mock('../src/utils/api/common.ts');
+vi.mock('../utils/api/common.ts');
 
 let spy: MockInstance;
 let report: any;
 const apiHelper = new APIHelper();
-const testObjects = new TestObjects();
 const weeklyReportGenerator = new WeeklyReportGenerator('MockDB', trelloConfig.trelloApiKey, trelloConfig.trelloToken, "http://localhost");
 const mockFunctions = new MockFunctions();
 
@@ -38,18 +36,18 @@ describe('WeeklyReportGenerator', () => {
         'SELECT * FROM completed_tasks WHERE completed_at BETWEEN ? AND ?', 
         {completed_at_start: startOfWeek.toISOString(), 
           completed_at_end: endOfWeek.toISOString()});
-      return testObjects.trelloTask;
+      return trelloTask;
     })
 
-    mockDb.query.mockResolvedValue(testObjects.trelloTask);
+    mockDb.query.mockResolvedValue(trelloTask);
 
     const tasks = await weeklyReportGenerator.fetchCompletedTasks();
-    expect(tasks).toEqual(testObjects.trelloTask);
+    expect(tasks).toEqual(trelloTask);
     expect(weeklyReportGenerator.fetchCompletedTasks).toHaveBeenCalled();
   });
 
   it('should fetch Trello card details', async () => {
-    const responseData = testObjects.trelloApiResponse;
+    const responseData = trelloApiResponse;
     
     spy = vi.spyOn(weeklyReportGenerator, 'fetchTrelloCardDetails').mockImplementation(async () => {
       let idBoardTrello = 1;
@@ -67,12 +65,12 @@ describe('WeeklyReportGenerator', () => {
   });
 
   it('should compile a report', async () => {
-    spy = vi.spyOn(weeklyReportGenerator, 'compileReport').mockReturnValue(Promise.resolve(testObjects.compileReportData));
+    spy = vi.spyOn(weeklyReportGenerator, 'compileReport').mockReturnValue(Promise.resolve(trelloCompileReportData));
 
     report = await weeklyReportGenerator.compileReport(mockTasks);
-    expect(report.teamStats).to.be.empty;
-    expect(report.taskSummaries).toHaveLength(1);
-    expect(report.blockedItems).toHaveLength(1);
+    expect(report.trelloTeamStats).to.be.empty;
+    expect(report.trelloTaskSummaries).toHaveLength(1);
+    expect(report.trelloBlockedItems).toHaveLength(1);
   });
 
   it('should send the report to the external API', async () => {

@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, MockInstance, vi } from 'vitest';
-import {getBoardData, getMultipleLists} from '../test_data/getBoardData.ts';
+import {getBoardData, getMultipleLists} from '../test_data/trelloData.ts';
 import APIHelper from '../utils/api/common.ts';
 import { AxiosError, AxiosHeaders } from 'axios';
 import { trelloConfig } from '../config/config.ts';

@@ -1,11 +1,10 @@
 import { beforeAll, describe, expect, it, MockInstance, vi } from 'vitest';
 import { MockFunctions } from '../utils/helpers/common.ts';
-import { TestObjects } from '../utils/helpers/testObjects.ts';
+import { incompleteTasks, trelloCard, trelloProcessedCards } from '../test_data/trelloData.ts';
 import { TaskWorkflowFunc } from '../utils/taskManagingWorkflow.ts';
 import axios from 'axios';
 
 const taskWorkflowFunc = new TaskWorkflowFunc();
-const testObjects = new TestObjects();
 let spy: MockInstance;
 
 describe('Mocking complex functions', async () => {
@@ -14,11 +13,11 @@ describe('Mocking complex functions', async () => {
         spy = vi.spyOn(taskWorkflowFunc, 'fetchIncompleteTasksFromDB')
             .mockImplementation(async () => {
                 // Simulate a database query
-            return testObjects.incompleteTasks;
+            return incompleteTasks;
         })
         spy = vi.spyOn(taskWorkflowFunc, 'createTrelloCard')
             .mockImplementation(async () => {
-                return testObjects.trelloCard;
+                return trelloCard;
         })
         spy = vi.spyOn(taskWorkflowFunc, 'updateTaskWithTrelloCardID')
             .mockImplementation(async () => {
@@ -32,7 +31,7 @@ describe('Mocking complex functions', async () => {
         expect(taskWorkflowFunc.fetchIncompleteTasksFromDB).toHaveBeenCalled();
         expect(taskWorkflowFunc.createTrelloCard).toHaveBeenCalled();
         expect(taskWorkflowFunc.updateTaskWithTrelloCardID).toHaveBeenCalled();
-        expect(result).to.deep.equals(testObjects.processedCards)
+        expect(result).to.deep.equals(trelloProcessedCards);
     });
 
     it('Try to check on API being called within reportToDB', async () => {

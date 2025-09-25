@@ -7,7 +7,7 @@ const apiHelper = new APIHelper();
 let idBoardTrello: string;
 let idNewList: string;
 
-describe.skip('Testing Trello', () => {
+describe.only('Testing Trello', () => {
   beforeAll(async () => {
     let response = await apiHelper.get(`https://api.trello.com/1/boards/${trelloConfig.trelloID}`);
     idBoardTrello = response.data.id;

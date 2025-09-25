@@ -1,8 +1,7 @@
 import { trelloConfig } from '../config/config.ts';
-import { TestObjects } from './helpers/testObjects.ts';
+import { trelloNoIncompleteTasksFound, incompleteTasks } from '../test_data/trelloData.ts';
 import axios from 'axios';// For making HTTP requests to the Trello API
 
-const   testObjects = new TestObjects();
 export class TaskWorkflowFunc {
   /**
    * Main function to manage tasks and create Trello cards.
@@ -13,7 +12,7 @@ export class TaskWorkflowFunc {
       const incompleteTasks = await this.fetchIncompleteTasksFromDB();
 
       if (incompleteTasks.length === 0) {
-        return testObjects.noIncompleteTasksFound;
+        return trelloNoIncompleteTasksFound;
       }
 
       const summary = {
@@ -46,7 +45,7 @@ export class TaskWorkflowFunc {
    */
   async fetchIncompleteTasksFromDB() {
     // Simulate a database query
-    return testObjects.incompleteTasks;
+    return incompleteTasks;
   }
 
   /**

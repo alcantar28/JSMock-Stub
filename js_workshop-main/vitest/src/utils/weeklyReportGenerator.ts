@@ -44,15 +44,15 @@ export class WeeklyReportGenerator {
 
   // Compile the report
   async compileReport(completedTasks: any) {
-    const taskSummaries = [];
-    const blockedItems = [];
-    const teamStats = {};
+    const trelloTaskSummaries = [];
+    const trelloBlockedItems = [];
+    const trelloTeamStats = {};
 
     for (const task of completedTasks) {
       const cardDetails = await this.fetchTrelloCardDetails(task.trello_card_id);
 
       if (!cardDetails) {
-        blockedItems.push({
+        trelloBlockedItems.push({
           taskId: task.id,
           reason: 'Failed to fetch Trello card details',
         });
@@ -61,11 +61,11 @@ export class WeeklyReportGenerator {
 
       // Update team stats
       cardDetails.idMembers.forEach((memberId: any) => {
-        teamStats[memberId] = (teamStats[memberId] || 0) + 1;
+        trelloTeamStats[memberId] = (trelloTeamStats[memberId] || 0) + 1;
       });
 
       // Add task summary
-      taskSummaries.push({
+      trelloTaskSummaries.push({
         taskId: task.id,
         cardTitle: cardDetails.name,
         cardDescription: cardDetails.desc,
@@ -74,9 +74,9 @@ export class WeeklyReportGenerator {
     }
 
     return {
-      teamStats,
-      taskSummaries,
-      blockedItems,
+      trelloTeamStats,
+      trelloTaskSummaries,
+      trelloBlockedItems,
     };
   }
 
