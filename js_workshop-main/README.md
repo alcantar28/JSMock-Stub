@@ -1,6 +1,6 @@
 # JS_Workshop
 
-
+## LOS CAMBIOS SÓLO FUERON PARA LA SECCIÓN DE VITEST.
 
 ## Getting started
 
